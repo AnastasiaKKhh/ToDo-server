@@ -12,16 +12,20 @@ router.patch("/todo/:uuid", function (req, res) {
     fs.readFile("data.json")
       .then((data) => {
         const tasks = JSON.parse(data);
-        newTasks = tasks.filter((task) => task.uuid !== uuid)
-  
-        const oldTask = tasks.find(item => item.uuid === uuid)///////
+        const oldTask = tasks.find(item => item.uuid === uuid)
         const updatedTask = { ...oldTask, ...body };
-  
-        newTasks.push(updatedTask)
-  
+        
+        const newTasks = tasks.map((item) => {
+          if (item.uuid === uuid) {
+            const newItem = { ...item, ...body }
+            return newItem
+          }
+          return item
+        })
+
         fs.writeFile("data.json", JSON.stringify(newTasks));
   
-        return res.send('Task was updated!!');
+        return res.send(updatedTask);
       })
   });
 
