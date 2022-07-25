@@ -7,4 +7,3 @@
   }
 
   exports.defaultError = defaultError
-//  module.exports = {defaultError}
