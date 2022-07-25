@@ -5,13 +5,16 @@ const router = express.Router();
 
 router.patch("/todo/:uuid", function (req, res) {
     const { params: { uuid }, body } = req;
+    
+    console.log(req.query)
+    console.log(req.params)
   
     fs.readFile("data.json")
       .then((data) => {
         const tasks = JSON.parse(data);
         newTasks = tasks.filter((task) => task.uuid !== uuid)
   
-        const oldTask = tasks.find(item => item.uuid === uuid)
+        const oldTask = tasks.find(item => item.uuid === uuid)///////
         const updatedTask = { ...oldTask, ...body };
   
         newTasks.push(updatedTask)
