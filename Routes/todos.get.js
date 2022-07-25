@@ -6,22 +6,24 @@ const router = express.Router();
 router.get("/todos", function (req, res) {
   fs.readFile("data.json").then((data) => {
     let tasks = JSON.parse(data);
+    console.log(req.query)
+    console.log(req.params)
 
     if (req.query.order === "asc") {
       tasks = tasks.sort((prev, next) => {
-        return new Date(prev.createdAT) - new Date(next.createdAT);
+        return new Date(prev.createdAt) - new Date(next.createdAt);
       });
     }
     if (req.query.order === "desc") {
       tasks = tasks.sort((prev, next) => {
-        return new Date(next.createdAT) - new Date(prev.createdAT);
+        return new Date(next.createdAt) - new Date(prev.createdAt);
       });
     }
     if (req.query.filterBy === "done") {
-      tasks = tasks.filter((task) => task.done === true);
+      tasks = tasks.filter((task) => task.done);/////
     }
     if (req.query.filterBy === "undone") {
-      tasks = tasks.filter((task) => task.done === false);
+      tasks = tasks.filter((task) => !task.done);
     }
     if (req.query.pp && req.query.page) {
       const lastTaskIndex = req.query.page *  req.query.pp;
