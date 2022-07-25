@@ -14,6 +14,12 @@ router.post("/todo", async function (req, res, next) {
         "Invalid fields in request! Try to rewrite your task"
       );
     }
+    if (req.body.name.length > 250) {
+      throw defaultError(
+        500,
+        "Too many symbols. Max is 250"
+      );
+    }
 
     const data = await fs.readFile("data.json");
 
