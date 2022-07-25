@@ -7,6 +7,8 @@ router.get("/todos", function (req, res) {
   fs.readFile("data.json")
     .then((data) => {
       let tasks = JSON.parse(data);
+      tasks = tasks.slice(((req.query.page-1)*req.query.pp), req.query.pp*req.query.page);
+      
       if (req.query.order === 'asc') {
         tasks = tasks.sort((prev, next) => {
           return new Date(prev.createdAT) - new Date(next.createdAT);
