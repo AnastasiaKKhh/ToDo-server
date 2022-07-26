@@ -5,7 +5,7 @@ const uuid = require("uuid");
 const router = express.Router();
 const { defaultError } = require("../../errors");
 
-router.post("/todo", async function (req, res, next) {
+router.post("/todo", async function (req, res) {
   try {
     const regExp = /[a-zA-Z0-9]/g;
     if (!req.body.name || !regExp.test(req.body.name)) {

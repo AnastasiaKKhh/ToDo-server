@@ -7,10 +7,9 @@ const { defaultError } = require("../../errors");
 router.patch("/todo/:uuid", async function (req, res) {
   try {
     const {params: { uuid },body,} = req;
-    console.log('PATCH body is',body)
 
     const regExp = /[a-zA-Z0-9]/g;
-    if (body.name!==undefined) {
+    if (body.name) {
       if (!body.name || !regExp.test(body.name)) {
       throw defaultError(
         422,
@@ -27,7 +26,7 @@ router.patch("/todo/:uuid", async function (req, res) {
     
     const data = await fs.readFile("data.json");
     const tasks = JSON.parse(data);
-    const sameTask = tasks.find((item) => item.name === body.name  && item.uuid !== uuid);
+    const sameTask = tasks.find((item) => item.name === body.name && item.uuid !== uuid);
 
     if (sameTask) {
       throw defaultError(400, "Task not created! Maybe the same task already exists");
@@ -36,14 +35,11 @@ router.patch("/todo/:uuid", async function (req, res) {
     const updatedTask = { ...oldTask, ...body };
     
     const newTasks = tasks.map((item) => {
-      if (item.uuid === uuid) {
-        const newItem = { ...item, ...body };
-        return newItem;
+      if (item.uuid === uuid) {;
+        return updatedTask;
       }
       return item;
     });
-
-    console.log(newTasks)
 
     fs.writeFile("data.json", JSON.stringify(newTasks));
 

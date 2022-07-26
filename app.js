@@ -15,12 +15,3 @@ app.listen(PORT, () => {
 
 recursive(`${__dirname}/Routes/todos`)
     .forEach(file => app.use(require(file)));
-
-// recursive(`${__dirname}/Routes/todos`).forEach((file) =>
-//   app.use("/", require(file), function (err, req, res, next) {
-//     if (err.code) {
-//       return res.status(err.code).send(err);
-//     }
-//     res.status(500).send(error500(err.message));
-//   })
-// );
