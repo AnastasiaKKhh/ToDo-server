@@ -39,7 +39,7 @@ router.post("/todo", async function (req, res, next) {
     fs.writeFile("data.json", JSON.stringify(tasks));
     res.send(createdTask);
   } catch (error) {
-    return res.send(error);
+    return res.status(error.status).send(error);
   }
 });
 

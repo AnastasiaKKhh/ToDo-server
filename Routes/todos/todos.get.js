@@ -8,6 +8,7 @@ router.get("/todos", async function (req, res) {
   try {
     const data = await fs.readFile("data.json");
     let tasks = JSON.parse(data);
+    let todoCounter = tasks.length;
 
     if (req.query.order === "asc") {
       tasks = tasks.sort((prev, next) => {
@@ -21,21 +22,21 @@ router.get("/todos", async function (req, res) {
     }
     if (req.query.filterBy === "done") {
       tasks = tasks.filter((task) => task.done);
+      todoCounter = tasks.length;
     }
     if (req.query.filterBy === "undone") {
       tasks = tasks.filter((task) => !task.done);
+      todoCounter = tasks.length;
     }
     if (req.query.pp && req.query.page) {
       const lastTaskIndex = req.query.page * req.query.pp;
       const firstTaskIndex = lastTaskIndex - req.query.pp;
       tasks = tasks.slice(firstTaskIndex, lastTaskIndex);
-      console.log("Tasks per page: ", req.query.pp);
-      console.log("Current page: ", req.query.page);
     }
 
-    res.send({ count: tasks.length, tasks });
+    res.send({ count: todoCounter, tasks });
   } catch (error) {
-    return res.send(defaultError(500, "Something went wrong"));
+    return res.status(error.status).send(error);
   }
 });
 

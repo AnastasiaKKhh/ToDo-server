@@ -7,9 +7,11 @@ const { defaultError } = require("../../errors");
 router.patch("/todo/:uuid", async function (req, res) {
   try {
     const {params: { uuid },body,} = req;
+    console.log('PATCH body is',body)
 
     const regExp = /[a-zA-Z0-9]/g;
-    if (!body.name || !regExp.test(body.name)) {
+    if (body.name!==undefined) {
+      if (!body.name || !regExp.test(body.name)) {
       throw defaultError(
         422,
         "Invalid fields in request! Try to rewrite your task"
@@ -21,7 +23,8 @@ router.patch("/todo/:uuid", async function (req, res) {
         "Too many symbols. Max is 250"
       );
     }
-
+    }
+    
     const data = await fs.readFile("data.json");
     const tasks = JSON.parse(data);
     const sameTask = tasks.find((item) => item.name === body.name  && item.uuid !== uuid);
@@ -32,7 +35,6 @@ router.patch("/todo/:uuid", async function (req, res) {
     const oldTask = tasks.find((item) => item.uuid === uuid);
     const updatedTask = { ...oldTask, ...body };
     
-
     const newTasks = tasks.map((item) => {
       if (item.uuid === uuid) {
         const newItem = { ...item, ...body };
@@ -41,11 +43,13 @@ router.patch("/todo/:uuid", async function (req, res) {
       return item;
     });
 
+    console.log(newTasks)
+
     fs.writeFile("data.json", JSON.stringify(newTasks));
 
     return res.send(updatedTask);
   } catch (error) {
-    return res.send(error);
+    return res.status(error.status).send(error);
   }
 });
 

@@ -1,6 +1,6 @@
- function defaultError (status, text) {
+ function defaultError (code, text) {
     const newError = {
-      code: status,
+      status: code,
       message: text
     }
     return newError
