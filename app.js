@@ -9,7 +9,7 @@ const recursive = require('recursive-readdir-sync');
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
-app.listen(PORT, () => {
+app.listen(PORT || 3000, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
