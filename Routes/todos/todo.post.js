@@ -4,9 +4,10 @@ const fs = require("fs").promises;
 const uuid = require("uuid");
 const router = express.Router();
 const { defaultError } = require("../../errors");
+const db = require("../../models")
 
 router.post("/todo", async function (req, res) {
-  try {
+   try {
     const regExp = /[a-zA-Z0-9]/g;
     if (!req.body.name || !regExp.test(req.body.name)) {
       throw defaultError(
@@ -21,22 +22,19 @@ router.post("/todo", async function (req, res) {
       );
     }
 
-    const data = await fs.readFile("data.json");
-
-    const tasks = JSON.parse(data);
+    const tasks = await db.Task.findAll();
     const sameTask = tasks.find((item) => item.name === req.body.name);
-
     if (sameTask) {
       throw defaultError(400, "Task not created! Maybe the same task already exists");
     }
-    const createdTask = {
-      name: req.body.name,
+
+    const createdTask = await db.Task.create({
       uuid: uuid.v1(),
+      name:  req.body.name,
       done: false,
-      createdAt: new Date(),
-    };
-    tasks.push(createdTask);
-    fs.writeFile("data.json", JSON.stringify(tasks));
+      createdAt:new Date(),
+      updatedAt:new Date()
+    })
     res.send(createdTask);
   } catch (error) {
     return res.status(error.status).send(error);

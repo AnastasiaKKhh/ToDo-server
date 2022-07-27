@@ -3,23 +3,32 @@ const { defaultError } = require("../../errors");
 const fs = require("fs").promises;
 
 const router = express.Router();
+const db = require("../../models")
 
 
 router.delete("/todo/:uuid", async function (req, res) {
   try {
-  const {params: { uuid }} = req;
-  const data = await fs.readFile("data.json");
+    const {params: { uuid }} = req;
+    const deletedTask = await db.Task.destroy({
+      where: {
+        uuid: uuid,
+      },
+    });
+  // const {params: { uuid }} = req;
+  // const data = await fs.readFile("data.json");
 
-  const tasks = JSON.parse(data);
-  const deletedTask = tasks.find((item) => item.uuid === uuid);
+  // const tasks = JSON.parse(data);
+  // const deletedTask = tasks.find((item) => item.uuid === uuid);
 
   if(!deletedTask) {
     throw defaultError(404, "Task not found")
   }
-  const newTasks = tasks.filter((task) => task.uuid !== deletedTask.uuid);
+  // const newTasks = tasks.filter((task) => task.uuid !== deletedTask.uuid);
   
-  fs.writeFile("data.json", JSON.stringify(newTasks));;
-  return res.send(deletedTask.uuid);
+  // fs.writeFile("data.json", JSON.stringify(newTasks));;
+  // return res.send(deletedTask.uuid);
+  console.log("Task delete: ", deletedTask)
+  return res.send('task was deleted')
 } catch(error) {
   return res.status(error.status).send(error)
 }
