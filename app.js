@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const PORT = process.env.SERVER_BASE_PORT;
+const PORT = process.env.SERVER_BASE_PORT || 5000;
 const bp = require("body-parser");
 
 const recursive = require('recursive-readdir-sync');
