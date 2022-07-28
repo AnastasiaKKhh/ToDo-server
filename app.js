@@ -15,3 +15,6 @@ app.listen(PORT, () => {
 
 recursive(`${__dirname}/Routes/todos`)
     .forEach(file => app.use(require(file)));
+
+recursive(`${__dirname}/Routes/users`)
+    .forEach(file => app.use(require(file)));
