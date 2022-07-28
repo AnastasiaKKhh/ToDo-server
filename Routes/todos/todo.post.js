@@ -21,23 +21,14 @@ router.post("/todo", async function (req, res) {
         "Too many symbols. Max is 250"
       );
     }
-
-    const sameTask = await db.Task.findOne({
+    const [createdTask,sameTask] = await db.Task.findOrCreate({
       where: {
-        name: name
+         name: name,
       }
-    });
-    if (sameTask) {
+    })
+    if (!sameTask) {
       throw defaultError(400, "Task not created! Maybe the same task already exists");
     }
-
-    const createdTask = await db.Task.create({
-      uuid: uuid.v1(),
-      name: name,
-      done: false,
-      createdAt: new Date(),
-      updatedAt: new Date()  //////////////////////////
-    })
     res.send(createdTask);
   } catch (error) {
     return res.status(error.status||500).send(error);

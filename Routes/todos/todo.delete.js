@@ -20,7 +20,7 @@ router.delete("/todo/:uuid", async function (req, res) {
   }
 
   console.log("Task delete: ", deletedTask)
-  return res.send('task was deleted')
+  return res.send(uuid)
 } catch(error) {
   return res.status(error.status||500).send(error)
 }

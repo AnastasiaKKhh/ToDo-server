@@ -9,23 +9,20 @@ router.get("/todos", async function (req, res) {
   try {
     const { query: { page=1, pp=5, filterBy, order='asc' } } = req;
     let tasks;
-  
-    if (filterBy) {////////////
-      tasks = await db.Task.findAndCountAll({
-        where: {
-          done: filterBy === FILTER_BY.DONE ? true : false,
-        },
-        order: [["createdAt", order]],
-        limit: pp,
-        offset: (+page - 1) * +pp
-      })
-    } else {
-      tasks = await db.Task.findAndCountAll({
-        order: [["createdAt", order]],
-        limit: pp,
-        offset: (+page - 1) * +pp
-      })
+
+    const FILTERS = {
+      done: true,
+      undone: false
     }
+    const whereCondition = filterBy ? { done: FILTERS[filterBy] } : {}
+   
+      tasks = await db.Task.findAndCountAll({
+        where: whereCondition,
+        order: [["createdAt", order]],
+        limit: pp,
+        offset: (+page - 1) * +pp
+      })
+    
     const { rows, count } = tasks
     return res.send({ count, tasks: rows });
   } catch (error) {
