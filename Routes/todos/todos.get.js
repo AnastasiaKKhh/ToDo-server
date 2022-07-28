@@ -1,8 +1,6 @@
 const c = require("config");
 const express = require("express");
-const fs = require("fs").promises;
 const router = express.Router();
-const { FILTER_BY } = require("../../constants");
 const db = require("../../models")
 
 router.get("/todos", async function (req, res) {

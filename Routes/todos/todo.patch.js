@@ -1,5 +1,4 @@
 const express = require("express");
-const fs = require("fs").promises;
 
 const router = express.Router();
 const { defaultError } = require("../../errors");
@@ -36,17 +35,20 @@ router.patch("/todo/:uuid", async function (req, res) {
       }
     }
 
-    const [_,updatedTask] = await db.Task.update({ ...body }, { 
-      where: { 
-        uuid: uuid 
-      },
-      returning: true,
-      plain: true
-      });
+    const [_, updatedTask] = await db.Task.update(
+      { ...body },
+      {
+        where: {
+          uuid: uuid,
+        },
+        returning: true,
+        plain: true,
+      }
+    );
 
     return res.send(updatedTask);
   } catch (error) {
-    return res.status(error.status||500).send(error);
+    return res.status(error.status || 500).send(error);
   }
 });
 

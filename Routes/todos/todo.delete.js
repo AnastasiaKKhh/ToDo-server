@@ -1,7 +1,5 @@
 const express = require("express");
 const { defaultError } = require("../../errors");
-const fs = require("fs").promises;
-
 const router = express.Router();
 const db = require("../../models")
 
