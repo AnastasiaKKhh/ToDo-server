@@ -26,15 +26,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     createdAt: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      field: 'created_at'
     },
     updatedAt: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      field: 'updated_at'
     }
   }, {
     sequelize,
     modelName: 'Task',
+    tableName: 'tasks'
   });
   return Task;
 };
