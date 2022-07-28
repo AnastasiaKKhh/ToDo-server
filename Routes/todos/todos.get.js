@@ -7,10 +7,10 @@ const db = require("../../models")
 
 router.get("/todos", async function (req, res) {
   try {
-    const { query: { page, pp, filterBy, order } } = req;
+    const { query: { page=1, pp=5, filterBy, order='asc' } } = req;
     let tasks;
   
-    if (filterBy) {
+    if (filterBy) {////////////
       tasks = await db.Task.findAndCountAll({
         where: {
           done: filterBy === FILTER_BY.DONE ? true : false,

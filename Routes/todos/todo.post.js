@@ -36,11 +36,11 @@ router.post("/todo", async function (req, res) {
       name: name,
       done: false,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date()  //////////////////////////
     })
     res.send(createdTask);
   } catch (error) {
-    return res.status(error.status).send(error);
+    return res.status(error.status||500).send(error);
   }
 });
 

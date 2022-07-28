@@ -36,7 +36,7 @@ router.patch("/todo/:uuid", async function (req, res) {
       }
     }
 
-    const [rowsCount,updatedTask] = await db.Task.update({ ...body }, { 
+    const [_,updatedTask] = await db.Task.update({ ...body }, { 
       where: { 
         uuid: uuid 
       },
@@ -46,7 +46,7 @@ router.patch("/todo/:uuid", async function (req, res) {
 
     return res.send(updatedTask);
   } catch (error) {
-    return res.status(error.status).send(error);
+    return res.status(error.status||500).send(error);
   }
 });
 

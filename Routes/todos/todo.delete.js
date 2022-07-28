@@ -11,7 +11,7 @@ router.delete("/todo/:uuid", async function (req, res) {
     const {params: { uuid }} = req; 
     const deletedTask = await db.Task.destroy({
       where: {
-        uuid: uuid,
+        uuid,
       },
     });
 
@@ -22,7 +22,7 @@ router.delete("/todo/:uuid", async function (req, res) {
   console.log("Task delete: ", deletedTask)
   return res.send('task was deleted')
 } catch(error) {
-  return res.status(error.status).send(error)
+  return res.status(error.status||500).send(error)
 }
 });
 
