@@ -3,11 +3,12 @@ const express = require("express");
 const uuid = require("uuid");
 const router = express.Router();
 const { defaultError } = require("../../errors");
+const isAuth = require("../../middlewares/isAuth");
 const db = require("../../models")
 
-router.post("/todo", async function (req, res) {
+router.post("/todo", isAuth, async function (req, res) {
   try {
-    const { body: { name } } = req;
+    const { body: { name }, user: { id: userId } } = req;
     const regExp = /[a-zA-Z0-9]/g;
     if (!name || !regExp.test(name)) {
       throw defaultError(
@@ -21,9 +22,13 @@ router.post("/todo", async function (req, res) {
         "Too many symbols. Max is 250"
       );
     }
-    const [createdTask,sameTask] = await db.Task.findOrCreate({
+    console.log(req)
+    console.log('userId')
+
+    const [createdTask, sameTask] = await db.Task.findOrCreate({
       where: {
-         name: name,
+        name: name,
+        user_id: userId
       }
     })
     if (!sameTask) {
@@ -31,7 +36,7 @@ router.post("/todo", async function (req, res) {
     }
     res.send(createdTask);
   } catch (error) {
-    return res.status(error.status||500).send(error);
+    return res.status(error.status || 500).send(error);
   }
 });
 

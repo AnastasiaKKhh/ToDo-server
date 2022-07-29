@@ -2,6 +2,7 @@ const express = require("express");
 const { defaultError } = require("../../errors");
 const router = express.Router();
 const db = require("../../models")
+const isAuth = require("../../middlewares/isAuth");
 
 
 router.delete("/todo/:uuid", async function (req, res) {

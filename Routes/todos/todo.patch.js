@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const { defaultError } = require("../../errors");
 const db = require("../../models");
+// const isAuth = require("../../middlewares/isAuth");
 
 router.patch("/todo/:uuid", async function (req, res) {
   try {
