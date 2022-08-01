@@ -5,7 +5,7 @@ const db = require("../../models")
 const isAuth = require("../../middlewares/isAuth");
 
 
-router.delete("/todo/:uuid", async function (req, res) {
+router.delete("/todo/:uuid", isAuth, async function (req, res) {
   try {
     const {params: { uuid }} = req; 
     const deletedTask = await db.Task.destroy({

@@ -3,9 +3,9 @@ const express = require("express");
 const router = express.Router();
 const { defaultError } = require("../../errors");
 const db = require("../../models");
-// const isAuth = require("../../middlewares/isAuth");
+const isAuth = require("../../middlewares/isAuth");
 
-router.patch("/todo/:uuid", async function (req, res) {
+router.patch("/todo/:uuid", isAuth, async function (req, res) {
   try {
     const {
       params: { uuid },
@@ -13,8 +13,15 @@ router.patch("/todo/:uuid", async function (req, res) {
     } = req;
 
     const regExp = /[a-zA-Z0-9]/g;
+    
+    if (body.name === '') {
+      throw defaultError(
+        422,
+        "Invalid fields in request! Try to rewrite your task"
+      );
+    }
     if (body.name) {
-      if (!body.name || !regExp.test(body.name)) {
+      if (!regExp.test(body.name)) {
         throw defaultError(
           422,
           "Invalid fields in request! Try to rewrite your task"
