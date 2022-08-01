@@ -3,9 +3,11 @@ const app = express();
 require("dotenv").config();
 const PORT = process.env.SERVER_BASE_PORT || 5000;
 const bp = require("body-parser");
+const cors = require("cors")
 
 const recursive = require('recursive-readdir-sync');
 
+app.use(cors())
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
