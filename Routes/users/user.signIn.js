@@ -22,6 +22,15 @@ router.post("/reg", async function (req, res) {
       );
     }
 
+    const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,128}$/g
+
+    if (!passwordRegExp.test(password)) {
+      throw defaultError(
+        422,
+        "Invalid fields in request! Create another password"
+      );
+    }
+
     // if (login.length < 5 || login.length > 30) {
     //   throw defaultError(
     //     400,
@@ -33,18 +42,21 @@ router.post("/reg", async function (req, res) {
 
     const [newUser, sameUser] = await db.User.findOrCreate({
       where: {
-        login: login
+        login: login,
       },
-      password: encryptedPassword
+      defaults: {
+        password: encryptedPassword
+      },
     })
-
-    console.log('Login: ', login)
-
-    console.log('Same nameeee: ', sameUser)
 
     if (!sameUser) {
       throw defaultError(400, "User with this name already exists");
-    }
+    } 
+    // else {
+    //   newUser.password = encryptedPassword
+    // } 
+    
+    console.log('newUser password: ', newUser.password)
 
     const { id } = newUser;
     const { access, refresh } = await createPair(id)
