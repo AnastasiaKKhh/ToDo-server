@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.hasMany(models.Task, {
-        foreignKey: 'user_id',
-      });
+      // User.hasMany(models.Task, {
+      //   foreignKey: 'user_id',
+      // });
     }
   }
   User.init({ 
