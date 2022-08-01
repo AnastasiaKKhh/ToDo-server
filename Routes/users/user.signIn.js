@@ -52,9 +52,6 @@ router.post("/reg", async function (req, res) {
     if (!sameUser) {
       throw defaultError(400, "User with this name already exists");
     } 
-    // else {
-    //   newUser.password = encryptedPassword
-    // } 
     
     console.log('newUser password: ', newUser.password)
 

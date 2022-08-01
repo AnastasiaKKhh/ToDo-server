@@ -14,7 +14,7 @@ const isAuth = async (req, res, next) => {
     req.user = user.toJSON();
     next();
   } catch (err) {
-    return res.status(err.status).send(err);
+    return res.status(err.status||500).send(err);
   }
 };
 
