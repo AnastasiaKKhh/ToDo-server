@@ -12,29 +12,36 @@ router.post("/reg", async function (req, res) {
   try {
     const { body: { login, password } } = req;
 
-    const regExp = /[a-zA-Z0-9 -]/g; // how to insert ban spaces???
+    const latinRegExp = /^(?=.{5,30}$)[a-zA-Z0-9]+(?:[-][a-zA-Z0-9]+)?$/g; 
+    const cyrillicRegexp = /^(?=.{5,30}$)[ЁёА-я0-9]+(?:[-][ЁёА-я0-9]+)?$/g
 
-    if (!login || !regExp.test(login)) {
+    if (!login || !latinRegExp.test(login) && !cyrillicRegexp.test(login)) {
       throw defaultError(
         422,
         "Invalid fields in request! Create another name"
       );
     }
-    if (login.length < 5 || login.length > 30) {
-      throw defaultError(
-        400,
-        "Invalid name. It should have 5 - 30 symbols" 
-      );
-    }
+
+    // if (login.length < 5 || login.length > 30) {
+    //   throw defaultError(
+    //     400,
+    //     "Invalid name. It should have 5 - 30 symbols" 
+    //   );
+    // }
     
-    encryptedPassword = await bcrypt.hash(password, 10)
+    const encryptedPassword = await bcrypt.hash(password, 10)
 
     const [newUser, sameUser] = await db.User.findOrCreate({
       where: {
-        login: login,
-        password: encryptedPassword
-      }
+        login: login
+      },
+      password: encryptedPassword
     })
+
+    console.log('Login: ', login)
+
+    console.log('Same nameeee: ', sameUser)
+
     if (!sameUser) {
       throw defaultError(400, "User with this name already exists");
     }
