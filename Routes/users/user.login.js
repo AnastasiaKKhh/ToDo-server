@@ -24,11 +24,8 @@ router.post("/login", async function (req, res) {
       })
 
     if (!user) {
-      throw defaultError(404, "User not found");
+      throw defaultError(404, "User with this login not found");
     }
-
-    console.log("USER: ",user.password)
-    console.log("PASSWORD: ",password)
 
     const matchPass = await bcrypt.compare(password, user.password)
 

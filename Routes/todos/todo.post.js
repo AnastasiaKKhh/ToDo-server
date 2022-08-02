@@ -22,8 +22,6 @@ router.post("/todo", isAuth, async function (req, res) {
         "Too many symbols. Max is 250"
       );
     }
-    console.log(req)
-    console.log('userId')
 
     const [createdTask, sameTask] = await db.Task.findOrCreate({
       where: {

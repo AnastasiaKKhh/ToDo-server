@@ -17,8 +17,7 @@ router.delete("/todo/:uuid", isAuth, async function (req, res) {
   if(!deletedTask) {
     throw defaultError(404, "Task not found")
   }
-
-  console.log("Task delete: ", deletedTask)
+  
   return res.send(uuid)
 } catch(error) {
   return res.status(error.status||500).send(error)

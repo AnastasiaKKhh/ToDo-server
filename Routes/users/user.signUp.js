@@ -18,17 +18,17 @@ router.post("/reg", async function (req, res) {
     if (!login || !latinRegExp.test(login) && !cyrillicRegexp.test(login)) {
       throw defaultError(
         422,
-        "Invalid fields in request! Create another name"
+        "Login should contain 5-30 chars, no spaces and no special symbols except -"
       );
     }
 
     const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d~ !?@#$%^&*_\-+( )[ \]{ } > < \/ \\ | " ' . , : ;]{8,128}$/g
     const passwordRegExpCyrillic = /^(?=.*[ёа-я])(?=.*[ЁА-Я])(?=.*\d)[Ёёа-яА-Я\d~ !?@#$%^&*_\-+( )[ \]{ } > < \/ \\ | " ' . , : ;]{8,128}$/g
 
-    if (!passwordRegExp.test(password) && !!passwordRegExpCyrillic.test(password)) {
+    if (!passwordRegExp.test(password) && !passwordRegExpCyrillic.test(password)) {
       throw defaultError(
         422,
-        "Invalid fields in request! Create another password"
+        "Password should contain 8-128 chars, at least 1 uppercase and lowercase letter and 1 number"
       );
     }
     
@@ -46,12 +46,12 @@ router.post("/reg", async function (req, res) {
     if (!sameUser) {
       throw defaultError(400, "User with this name already exists");
     } 
-    
-    console.log('newUser password: ', newUser.password)
 
     const { id } = newUser;
     const { access, refresh } = await createPair(id)
-    return res.send({ access, refresh, ...newUser.toJSON() });
+    const {login: userLogin} = newUser
+
+    return res.send({ access, refresh, login: userLogin, id});
   } catch (error) {
     return res.status(error.status || 500).send(error);
   }
