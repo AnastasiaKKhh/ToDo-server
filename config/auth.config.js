@@ -1,6 +1,8 @@
+require("dotenv").config();
+
 module.exports = {
     accessToken: {
-        salt: "secret",
+        salt: process.env.SALT_WORD,
         expired: "10m",
         type: "access",
     },
