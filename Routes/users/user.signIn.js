@@ -22,21 +22,15 @@ router.post("/reg", async function (req, res) {
       );
     }
 
-    const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,128}$/g
+    const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d~ !?@#$%^&*_\-+( )[ \]{ } > < \/ \\ | " ' . , : ;]{8,128}$/g
+    const passwordRegExpCyrillic = /^(?=.*[ёа-я])(?=.*[ЁА-Я])(?=.*\d)[Ёёа-яА-Я\d~ !?@#$%^&*_\-+( )[ \]{ } > < \/ \\ | " ' . , : ;]{8,128}$/g
 
-    if (!passwordRegExp.test(password)) {
+    if (!passwordRegExp.test(password) && !!passwordRegExpCyrillic.test(password)) {
       throw defaultError(
         422,
         "Invalid fields in request! Create another password"
       );
     }
-
-    // if (login.length < 5 || login.length > 30) {
-    //   throw defaultError(
-    //     400,
-    //     "Invalid name. It should have 5 - 30 symbols" 
-    //   );
-    // }
     
     const encryptedPassword = await bcrypt.hash(password, 10)
 
