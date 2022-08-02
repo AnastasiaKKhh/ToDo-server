@@ -1,8 +1,7 @@
 const express = require("express");
-const { defaultError } = require("../../errors");
 const router = express.Router();
 const db = require("../../models");
-const jwt = require("jsonwebtoken");
+
 
 router.get("/users", async function (req, res) {
   try {
